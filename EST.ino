@@ -50,7 +50,6 @@ boolean playBuzzer = 0;
 void setup() 
 {
 
-  //Assigning all the pins as required.
   pinMode(switchPin, INPUT_PULLUP);
   pinMode(LED_2, OUTPUT);
   pinMode(LED_1, OUTPUT);
@@ -99,8 +98,7 @@ void setup()
     {
       lcd.setCursor(0,1);
       lcd.print("Horizontal!");
-      orientation = HORIZONTAL;
-      //Read the raw acc and gyro data from the MPU-6050 1000 times                                          
+      orientation = HORIZONTAL;                                      
       for (int cal_int = 0; cal_int < 1000 ; cal_int ++)
       {                  
         read_mpu_6050_data();                                         
@@ -136,19 +134,13 @@ void setup()
     else {
       lcd.setCursor(0,1);
       lcd.print("Vertical!");
-      orientation = VERTICAL;
-      //Read the raw acc and gyro data from the MPU-6050 1000 times                                          
+      orientation = VERTICAL;                                       
       for (int cal_int = 0; cal_int < 1000 ; cal_int ++) {                  
-        read_mpu_6050_data(); 
-        //Add the gyro x offset to the gyro_x_cal variable                                            
-        gyro_x_cal += gyro_x;
-        //Add the gyro y offset to the gyro_y_cal variable                                              
-        gyro_y_cal += gyro_y; 
-        //Add the gyro z offset to the gyro_z_cal variable                                             
-        gyro_z_cal += gyro_z; 
-        //Add the acc x offset to the acc_x_cal variable                                            
-        acc_y_cal += acc_y;
-        //Add the acc y offset to the acc_y_cal variable                                            
+        read_mpu_6050_data();                                         
+        gyro_x_cal += gyro_x;                                           
+        gyro_y_cal += gyro_y;                                            
+        gyro_z_cal += gyro_z;                                          
+        acc_y_cal += acc_y;                                         
         acc_z_cal += acc_z;                                                         
       }
       gyro_x_cal /= 1000.0;                                                 
@@ -205,7 +197,7 @@ void loop()
   {
     if(horizonalCalibrationNotice == 0)   //Bu bölüm yalnızca bir kez çalıştırılır ve ardından yoksayılır
     {
-      eeprom_address = 0;                 //Set EEPROM address to 0 (start of horizontal calibration offsets
+      eeprom_address = 0;                 
       if(EEPROM.get(eeprom_address, horizonalCalibration) == 255)   //Verilere yalnızca gerçekten varsa erişilir!
       {
          eeprom_address += sizeof(int);
@@ -326,7 +318,6 @@ void loop()
     // Seviye LED'leri için Açıyı Kontrol Edin
     if (phi < -160.01)  //-2.01
     {
-      // Turn on Level LED
       digitalWrite(LED_2, HIGH);
       digitalWrite(LED_1, LOW);
       digitalWrite(LED_0, LOW);
@@ -368,7 +359,6 @@ void loop()
     } 
     else if ((phi > 60.01) && (phi < 160.00)) //1.01 2.00
     {
-      // Turn on Level LED
       digitalWrite(LED_2, LOW);
       digitalWrite(LED_1, LOW);
       digitalWrite(LED_0, LOW);
@@ -382,7 +372,6 @@ void loop()
     } 
     else if (phi > 160.01) //2.01
     {
-      // Turn on Level LED
       digitalWrite(LED_2, LOW);
       digitalWrite(LED_1, LOW);
       digitalWrite(LED_0, LOW);
@@ -394,8 +383,6 @@ void loop()
       }
     }
 
-  //Before printing the angle to the display, it makes any negative numbers positive, so it always shows 0 degrees +.
-  //If you want to show negative angles, omit this section
   if(phi<0)
   {
     phi = phi - (2*phi);
@@ -405,7 +392,6 @@ void loop()
     theta = theta - (2*theta);
   }
 
-  //End of section
 
   lcd.setCursor(9,0);
   lcd.print(phi,1);
@@ -425,10 +411,8 @@ void loop()
   }
   
 
- while(micros() - loop_timer < 4000);  //4000
- //Reset the loop timer                                
+ while(micros() - loop_timer < 4000);  //4000        
  loop_timer = micros();
- //Back to the top of the loop to start again!
 }
 
 //////////////////////
